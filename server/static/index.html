@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>REST API template</title>
+
+    <!-- Custom styles for this template -->
+    <link href="/localstatic/index.css" rel="stylesheet">
+
+    <style>
+      body { font-size: 1.0em; background: #fff }
+      a, a:hover { color: #000 }
+      .code a, a:hover { color: #fff; text-decoration: none }
+      h1 { font-size: 3em; margin-bottom: 0 }
+      h1, h2, h3 { font-family: "helvetica neue", helvetica, Arial; font-weight: bold }
+      p.tagline { color: #888; padding-bottom: 2em; font-size: 0.9em }
+      p.quote  { padding-bottom: 0 }
+      p.quoted { text-align: right; padding: 0; font-style: italic; padding-bottom: 1em; font-size: 0.8em }
+      pre.code { background: #222; color: #ddd; font-size: 1.2em; padding: 1em }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+      <h1>PSGI/Plack REST API Template</h1>
+      <p class="tagline">Create Rest API as fast as possible.</p>
+
+      <h2 id="installation">Get Started</h2>
+
+      <p class="inline">Add REST resources in server/default.conf:</p>
+      <pre class="code">
+RestMap:
+  v1:
+    /: Rest::Root</pre>
+
+      <p class="inline">Run server:</p>
+      <pre class="code">twiggy -p 5055 server/server.psgi</pre>
+
+      <p class="inline">Go to the server api:</p>
+      <pre class="code"><a href="http://localhost:5050/api/v1">http://localhost:5050/api/v1</a></pre>
+
+      <div id="footer">
+        Created by Vaclav Dovrtel.</br>
+        <a href="https://github.com/vasekd/">github</a>
+      </div>
+
+    </div>
+  </body>
+</html>
