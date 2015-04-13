@@ -11,3 +11,7 @@ twiggy -p 5050 server.psgi
 Open browser:
 
 http://localhost:5050/
+
+Default access: 
+login: test@test.com
+passwd: test
