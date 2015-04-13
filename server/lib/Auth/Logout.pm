@@ -22,7 +22,9 @@ sub GET {
 
 sub UnSetUser {
 	my ($env) = @_;
-	delete $env->{"psgix.session"}{user_id};
+
+	my $session = Plack::Session->new($env);
+	$session->remove("user_id");
 }
 
 1;

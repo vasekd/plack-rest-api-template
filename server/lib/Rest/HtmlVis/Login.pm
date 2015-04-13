@@ -78,6 +78,8 @@ sub html {
     $success = '<div class="info-panel bg-success">Success</div>';
   }elsif ($struct && $struct eq 'failed'){
     $success = '<div class="info-panel bg-danger">Wrong login name or password</div>';
+  }elsif ($struct && $struct eq 'login'){
+    $success = '<div class="info-panel bg-info">Already loged in</div>';
   }
 
 	return '

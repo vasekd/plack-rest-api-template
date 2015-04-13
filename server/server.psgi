@@ -22,6 +22,7 @@ use lib qw(./lib server/lib);
 #use lib qw(../Rest-HtmlVis/lib/ ../../Rest-HtmlVis/lib/);
 #use lib qw(../Plack-Middleware-FormatOutput/lib/ ../../Plack-Middleware-FormatOutput/lib/);
 #use lib qw(../Plack-Middleware-ParseContent/lib/ ../../Plack-Middleware-ParseContent/lib/);
+#use lib qw(../Plack-App-REST/lib/ ../../Plack-App-REST/lib/);
 use Log;
 use Version;
 use Auth::Store;
@@ -105,18 +106,19 @@ builder {
 	my $share = File::ShareDir::dist_dir('Rest-HtmlVis') || "../Rest-HtmlVis/share/";
 	$urlmap->mount("/static" => Plack::App::File->new(root => $share));
 
+	### Session info
+	enable 'Session',
+		state => Plack::Session::State::Cookie->new(
+			session_key => $const->get("SecureSessionKey")
+		),
+		store => Plack::Session::Store::DBI->new(
+			dbh => $auth->dbh
+		);
+
 	### Auth server
 	my $authprefix = $const->get('AuthPrefix');
+	my $authUrl = $authprefix;
 	$urlmap->mount($authprefix => builder {
-
-		### Session info
-		enable 'Session',
-			state => Plack::Session::State::Cookie->new(
-				session_key => $const->get("SecureSessionKey")
-			),
-			store => Plack::Session::Store::DBI->new(
-				dbh => $auth->dbh
-			);
 
 		enable 'FormatOutput', htmlvis => {
 			'default.content' => '',
@@ -133,6 +135,7 @@ builder {
 			eval "require ".$authMap->{$res};
 			die $@ if $@;
 			$amap->mount( $res => $authMap->{$res}->new($auth) );
+			$authUrl .= $res if $res eq '/login';
 		}
 		$amap->to_app;
 	});
@@ -148,12 +151,8 @@ builder {
 			enable 'FormatOutput';
 			enable 'ParseContent';
 
-			### Session info
-			enable 'Session::Cookie',
-				session_key => $const->get('SessionKey'),
-				expires => 3600, # 1 hour
-				secret  => $const->get('SessionSecret')
-			;
+			# Check user 
+			enable '+Plack::Middleware::CheckUserAccess', login_url => $authUrl;
 
 			### URL mapping
 			my $apimap = Plack::App::URLMap->new;
