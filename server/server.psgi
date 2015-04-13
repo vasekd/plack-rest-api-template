@@ -54,18 +54,6 @@ if (exists $ENV{PLACK_ENV}) {
 }
 $log->info("Set Plack Env.");
 
-### Generate session secret key for deployment
-my $sfile = $const->get('SessionSecretFile');
-if ($plackEnv eq 'deployment'){
-	if (-f $sfile){
-		open(FILE, $sfile) or die 'Can\'t read secret session file: '.$sfile."\n";
-		my $ssecret = <$sfile>;
-		close(FILE);
-		$const->set('SessionSecret', $ssecret);
-	}
-}
-$log->info("Generate secret key.");
-
 ### Init auth server's store
 my $auth = Auth::Store->new( $const->get('DBDir') )->init();
 
