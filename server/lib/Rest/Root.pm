@@ -3,7 +3,7 @@ package Rest::Root;
 use strict;
 use warnings;
 
-use parent 'Plack::App::REST';
+use parent 'Plack::App::RESTMy';
 
 sub GET {
 
