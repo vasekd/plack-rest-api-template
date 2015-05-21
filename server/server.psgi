@@ -132,9 +132,10 @@ builder {
 	my $prefix = $const->get('ApiPrefix');
 	my $restMap = $const->get('RestMap');
 
+	my $apimap = Plack::App::URLMap->new;
 	foreach my $ver (sort keys %{$restMap}) {
 		my $map = $restMap->{$ver};
-		$urlmap->mount($prefix.'/'.$ver => builder {
+		$apimap->mount($prefix.'/'.$ver => builder {
 			### Rest Middlewares
 			enable 'FormatOutput';
 			enable 'ParseContent';
@@ -143,19 +144,32 @@ builder {
 			enable '+Plack::Middleware::CheckUserAccess', login_url => $authUrl;
 
 			### URL mapping
-			my $apimap = Plack::App::URLMap->new;
+			my $resmap = Plack::App::URLMap->new;
 
 			foreach my $path (sort keys %{$map}){
 				eval "require ".$map->{$path};
 				die $@ if $@;
-				$apimap->mount( $path => $map->{$path}->new() );
+				$resmap->mount( $path => $map->{$path}->new($const) );
 			}
-			$apimap->to_app;
+			$resmap->to_app;
 		});
 	}
+	my $apiapp = $apimap->to_app;
 
-	### Set the client
-	$urlmap->mount("/" => Plack::App::File->new(file => "$myDir/static/index.html"));
+	# Mount project uri
+	$urlmap->mount("/" => sub {
+
+		if ($_[0]->{PATH_INFO} ne '/'){ # if not root
+			$_[0]->{PATH_INFO} =~ s/^\/(\w+)(.*)/$2/;
+			$_[0]->{'rest.project'} = $1;
+
+			if ($_[0]->{'rest.project'}){
+				return $apiapp->(@_);
+			}
+		}
+		
+		return Plack::App::File->new(file => "$myDir/static/index.html")->to_app->(@_);
+	});
 
 	$log->info("Server started.");
 	$urlmap->to_app;

@@ -27,6 +27,7 @@ sub new {
 				login => "VARCHAR NOT NULL",
 				password => "VARCHAR NOT NULL",
 				email => "VARCHAR NOT NULL",
+				projects => "VARCHAR NOT NULL",
 			}
 		},
 		sessions => {
@@ -72,14 +73,13 @@ sub checkTables {
 	foreach my $id (keys %{$self->presc}){
 		my @columns;
 		foreach my $c (keys %{$self->presc->{$id}{columns}}){
-			push @columns, $c.' '.$self->presc->{$id}{columns}{$c};
+			push @columns, $c;
 		};
 
-		my ($e) = eval{ $self->dbh->selectrow_array(
-			sprintf( "SELECT %s FROM %s", join(",", @columns), $self->presc->{$id}{table})
-		)};
+		my $sql = sprintf( "SELECT %s FROM %s", join(",", @columns), $self->presc->{$id}{table});
+		my ($e) = eval{ $self->dbh->selectrow_array($sql) };
 
-		return undef unless $@;
+		return undef if $@;
 	}
 	return 1;
 }
@@ -117,10 +117,11 @@ sub checkUser {
 	my $password = $self->getPasswd($passwd_nc);
 
 	# Check user
-	my ($user) = $self->dbh->selectrow_array( "SELECT login FROM users WHERE login = ? AND password = ?", undef, $login, $password );
+	my ($projStr, $user) = $self->dbh->selectrow_array( "SELECT projects, login FROM users WHERE login = ? AND password = ?", undef, $login, $password );
+	my %projects = map {$_ => undef} split(/,/,$projStr);
 
 	if ( $user ){
-		return $user;
+		return \%projects;
 	}else{
 		return 0;
 	}

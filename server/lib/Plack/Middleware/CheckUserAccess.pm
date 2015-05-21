@@ -23,7 +23,11 @@ sub call {
 	my($self, $env) = @_;
 
 	my $session = Plack::Session->new($env);
-	if ($session->get("user_id")){
+	my $project = $env->{'rest.project'};
+	my $sessionProjects = $session->get("projects")||{};
+
+	if ($session->get("user_id") && exists $sessionProjects->{$project}){
+		$env->{'rest.login'} = $session->get("user_id");
 		### Run app
 		my $res = $self->app->($env);
 		return $res;
