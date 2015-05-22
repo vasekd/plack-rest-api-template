@@ -9,7 +9,7 @@ use Plack::Util::Accessor qw(auth);
 use Plack::Session;
 use MIME::Base64;
 
-use HTTP::Exception qw(302);
+use HTTP::Exception qw(3XX);
 
 sub new {
 	my ($class, $auth) = @_;
@@ -27,14 +27,15 @@ sub GET {
 	if ($session->get("user_id")){
 		# Check number of requests
 		my $req_number = $session->get('req_number')||0;
-		if (!$req_number || $req_number >= 5){
+		if ($req_number >= 5){
 			$session->set('req_number', 0);
-
+			HTTP::Exception::400->throw(message=>'Redirection loop.');
 		}else{
-			$session->set('req_number', $req_number++);
-			HTTP::Exception::302->throw(location=>$goto) if $goto;
-			return { login => 'login' };
+			$session->set('req_number', ++$req_number);
 		}
+
+		HTTP::Exception::302->throw(location=>$goto) if $goto;
+		return { login => 'login' };
 	}
 
 	### Return login form
