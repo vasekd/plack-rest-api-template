@@ -50,10 +50,10 @@ sub POST {
 	if (
 		defined $data->{email} 
 		&& defined $data->{password}
-		&& $self->auth->checkUser($env, $data->{email}, $data->{password})
+		&& (my $projects = $self->auth->checkUser($env, $data->{email}, $data->{password}))
 	){
 		# Login success
-		SetUser($session, $env, $data->{email});
+		SetUser($session, $env, $data->{email}, $projects);
 		if ($goto){
 			HTTP::Exception::302->throw(location=>$goto);
 		}
@@ -73,10 +73,11 @@ sub GetGoto {
 }
 
 sub SetUser {
-	my ($session, $env, $login) = @_;
+	my ($session, $env, $login, $projects) = @_;
 
 	$env->{'psgix.logger'}->({level => 'debug', message => 'Loged: '.$login});
 	$session->set("user_id", $login);
+	$session->set("projects", $projects);
 }
 
 1;
