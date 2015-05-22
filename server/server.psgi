@@ -19,10 +19,10 @@ use File::ShareDir;
 
 # My own modules
 use lib qw(./lib server/lib);
-#use lib qw(../Rest-HtmlVis/lib/ ../../framework/Rest-HtmlVis/lib/);
-#use lib qw(../Plack-Middleware-FormatOutput/lib/ ../../framework/Plack-Middleware-FormatOutput/lib/);
-#use lib qw(../Plack-Middleware-ParseContent/lib/ ../../framework/Plack-Middleware-ParseContent/lib/);
-#use lib qw(../Plack-App-REST/lib/ ../../framework/Plack-App-REST/lib/);
+#use lib qw(../../Rest-HtmlVis/lib/ ../../framework/Rest-HtmlVis/lib/);
+#use lib qw(../../Plack-Middleware-FormatOutput/lib/ ../../framework/Plack-Middleware-FormatOutput/lib/);
+#use lib qw(../../Plack-Middleware-ParseContent/lib/ ../../framework/Plack-Middleware-ParseContent/lib/);
+#use lib qw(../../Plack-App-REST/lib/ ../../framework/Plack-App-REST/lib/);
 use Log;
 use Version;
 use Auth::Store;
