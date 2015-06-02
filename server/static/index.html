@@ -1,60 +1,40 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta equiv="Cotent-Type" content="text/html;charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>REST API template</title>
 
-    <!-- Custom styles for this template -->
-    <link href="/localstatic/index.css" rel="stylesheet">
-
-    <style>
-      body { font-size: 1.0em; background: #fff }
-      a, a:hover { color: #000 }
-      .code a, a:hover { color: #fff; text-decoration: none }
-      h1 { font-size: 3em; margin-bottom: 0 }
-      h1, h2, h3 { font-family: "helvetica neue", helvetica, Arial; font-weight: bold }
-      p.tagline { color: #888; padding-bottom: 2em; font-size: 0.9em }
-      p.quote  { padding-bottom: 0 }
-      p.quoted { text-align: right; padding: 0; font-style: italic; padding-bottom: 1em; font-size: 0.8em }
-      pre.code { background: #222; color: #ddd; font-size: 1.2em; padding: 1em }
-    </style>
-
+    <link rel="stylesheet" href="/localstatic/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/cover.css"/>
   </head>
-
   <body>
-
     <div class="container">
+      <row class="col-xs-12">
       <h1>PSGI/Plack REST API Template</h1>
-      <p class="tagline">Create Rest API as fast as possible.</p>
+      </row>
 
-      <h2 id="installation">Get Started</h2>
-
-      <p class="inline">Add REST resources in server/default.conf:</p>
-      <pre class="code">
-RestMap:
+      <row class="col-xs-12">
+        <h2>Get Started</h2>
+        <p class="inline">Add REST resources in server/default.conf:</p>
+        <pre class="code">RestMap:
   v1:
     /: Rest::Root</pre>
 
-      <p class="inline">Run server:</p>
-      <pre class="code">cd server; twiggy -p 5055 server.psgi</pre>
+        <p class="inline">Restart server:</p>
+        <pre class="code">cd server; twiggy -p 5055 server.psgi</pre>
 
-      <p class="inline">Go to the server api:</p>
-      <pre class="code"><a href="http://localhost:5055/demoProject/api/v1">http://localhost:5055/demoProject/api/v1</a></pre>
+        <p class="inline">Go to the server api:</p>
+        <pre class="code"><a href="http://localhost:5055/demoProject/api/v1">http://localhost:5055/demoProject/api/v1</a></pre>
 
-      <p class="inline">Default access:</p> 
-<pre class="code">login: test@test.com
+        <p class="inline">Default access:</p>
+        <pre class="code">login: test@test.com
 passwd: test</pre>
 
+      </row>
 
-      <div id="footer">
-        Created by Vaclav Dovrtel.</br>
-        <a href="https://github.com/vasekd/">github</a>
-      </div>
-
+        <p class="text-center">Created by Vaclav Dovrtel (<a href="https://github.com/vasekd/">github</a>)</a>
+      </row>
     </div>
   </body>
 </html>
